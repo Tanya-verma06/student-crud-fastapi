@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Student CRUD System</title>
+<style>
+body{
+font-family:Arial;
+background:#f4f4f4;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+margin:0;
+}
+.container{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 0 10px gray;
+width:400px;
+text-align:center;
+}
+input{
+width:90%;
+padding:10px;
+margin:8px;
+border:1px solid #ccc;
+border-radius:5px;
+}
+button{
+padding:10px 15px;
+margin:5px;
+border:none;
+border-radius:5px;
+color:white;
+cursor:pointer;
+}
+.add{background:green;}
+.view{background:blue;}
+.update{background:orange;}
+.delete{background:red;}
+pre{
+background:#eee;
+padding:10px;
+text-align:left;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>🎓 Student CRUD System</h2>
+
+<input type="number" id="id" placeholder="Student ID">
+<input type="text" id="name" placeholder="Student Name">
+<input type="number" id="age" placeholder="Student Age">
+
+<br>
+
+<button class="add" onclick="addStudent()">Add</button>
+<button class="view" onclick="viewStudents()">View</button>
+<button class="update" onclick="updateStudent()">Update</button>
+<button class="delete" onclick="deleteStudent()">Delete</button>
+
+<pre id="output"></pre>
+
+</div>
+
+<script>
+
+async function addStudent(){
+await fetch("/students",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+id:Number(document.getElementById("id").value),
+name:document.getElementById("name").value,
+age:Number(document.getElementById("age").value)
+})
+});
+alert("Student Added");
+}
+
+async function viewStudents(){
+const res=await fetch("/students");
+const data=await res.json();
+document.getElementById("output").innerText=JSON.stringify(data,null,2);
+}
+
+async function updateStudent(){
+await fetch("/students/"+document.getElementById("id").value,{
+method:"PUT",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+id:Number(document.getElementById("id").value),
+name:document.getElementById("name").value,
+age:Number(document.getElementById("age").value)
+})
+});
+alert("Student Updated");
+}
+
+async function deleteStudent(){
+await fetch("/students/"+document.getElementById("id").value,{
+method:"DELETE"
+});
+alert("Student Deleted");
+}
+
+</script>
+
+</body>
+</html>
